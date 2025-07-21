@@ -3,13 +3,17 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
     // TODO: Add any necessary instance variables.
-
+    private WeightedQuickUnionUF siteUF;
+    private int sitArr;
     public Percolation(int N) {
         // TODO: Fill in this constructor.
+        siteUF=new WeightedQuickUnionUF(N^2);
+        int sitArr[]=new int[N^2];
     }
 
     public void open(int row, int col) {
         // TODO: Fill in this method.
+
     }
 
     public boolean isOpen(int row, int col) {
