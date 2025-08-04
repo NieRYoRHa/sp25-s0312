@@ -7,7 +7,7 @@ import edu.princeton.cs.algs4.StdRandom;
 
 public class PercolationPicture {
     // delay in miliseconds (controls animation speed)
-    private static final int DELAY = 1;
+    private static final int DELAY = 500;
 
     // draw N-by-N percolation system
     public static void draw(Percolation perc, int N) {
