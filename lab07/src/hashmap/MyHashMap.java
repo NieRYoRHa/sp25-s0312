@@ -1,6 +1,11 @@
 package hashmap;
 
+import org.checkerframework.common.returnsreceiver.qual.This;
+
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
 
 /**
  *  A hash table-backed Map implementation.
@@ -9,6 +14,144 @@ import java.util.Collection;
  *  @author YOUR NAME HERE
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
+
+    /**
+     * Associates the specified value with the specified key in this map.
+     * If the map already contains the specified key, replaces the key's mapping
+     * with the value specified.
+     *
+     * @param key
+     * @param value
+     */
+    @Override
+    public void put(K key, V value) {
+        if(containsKey(key)){
+            update(key,value);
+        }
+        else {
+            map(key, value);
+        }
+    }
+
+    /**
+     * Update the value of key
+     */
+    public void update(K key,V value){
+
+    }
+
+    public void map(K key,V value){
+
+    }
+
+    /**
+     * Returns the value to which the specified key is mapped, or null if this
+     * map contains no mapping for the key.
+     *
+     * @param key
+     */
+    @Override
+    public V get(K key) {
+        return null;
+    }
+
+    /**
+     * Returns whether this map contains a mapping for the specified key.
+     *
+     * @param key
+     */
+    @Override
+    public boolean containsKey(K key) {
+        for(K k:this){
+            if(k==key){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns the number of key-value mappings in this map.
+     */
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    /**
+     * When elements number larger than
+     * initialCapacity * loadFactor,
+     * double the initialCapacity
+     */
+    public void reSize(){
+
+    }
+
+    /**
+     * Removes every mapping from this map.
+     */
+    @Override
+    public void clear() {
+
+    }
+
+    /**
+     * Returns a Set view of the keys contained in this map. Not required for this lab.
+     * If you don't implement this, throw an UnsupportedOperationException.
+     */
+    @Override
+    public Set<K> keySet() {
+        return Set.of();
+    }
+
+    /**
+     * Removes the mapping for the specified key from this map if present,
+     * or null if there is no such mapping.
+     * Not required for this lab. If you don't implement this, throw an
+     * UnsupportedOperationException.
+     *
+     * @param key
+     */
+    @Override
+    public V remove(K key) {
+        return null;
+    }
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator iterator() {
+        return new MyHashMapIterator();
+    }
+
+    public class MyHashMapIterator<K> implements Iterator<K>{
+
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return false;
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public K next() {
+            return null;
+        }
+    }
 
     /**
      * Protected helper class to store key/value pairs
@@ -22,6 +165,20 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
             key = k;
             value = v;
         }
+
+        @Override
+        public boolean equals(Object obj){
+            if(obj instanceof MyHashMap<?,?>.Node){
+                Node other = (Node) obj;
+                return other.key==this.key&&other.value==this.value;
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode(){
+            return this.key.hashCode();
+        }
     }
 
     /* Instance Variables */
@@ -29,9 +186,13 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     // You should probably define some more!
 
     /** Constructors */
-    public MyHashMap() { }
+    public MyHashMap() {
+        this(16,0.75);
+    }
 
-    public MyHashMap(int initialCapacity) { }
+    public MyHashMap(int initialCapacity) {
+        this(initialCapacity,0.75);
+    }
 
     /**
      * MyHashMap constructor that creates a backing array of initialCapacity.
@@ -40,7 +201,12 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * @param initialCapacity initial size of backing array
      * @param loadFactor maximum load factor
      */
-    public MyHashMap(int initialCapacity, double loadFactor) { }
+    public MyHashMap(int initialCapacity, double loadFactor) {
+        buckets = new Collection[initialCapacity];
+        for(int i=0;i<initialCapacity;i++){
+            buckets[i]=this.createBucket();
+        }
+    }
 
     /**
      * Returns a data structure to be a hash table bucket
@@ -64,7 +230,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     protected Collection<Node> createBucket() {
         // TODO: Fill in this method.
-        return null;
+        return new LinkedList<>();
     }
 
     // TODO: Implement the methods of the Map61B Interface below
