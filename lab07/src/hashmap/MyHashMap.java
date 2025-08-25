@@ -23,6 +23,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * @param key
      * @param value
      */
+    private int size;
+
     @Override
     public void put(K key, V value) {
         if(containsKey(key)){
@@ -129,6 +131,12 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     public class MyHashMapIterator<K> implements Iterator<K>{
 
+        private int index;
+        private Iterator<Node> coIterator;
+        MyHashMapIterator(){
+            coIterator =buckets[index].iterator();
+        }
+
         /**
          * Returns {@code true} if the iteration has more elements.
          * (In other words, returns {@code true} if {@link #next} would
@@ -138,6 +146,17 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
          */
         @Override
         public boolean hasNext() {
+            //current Node hasNext?
+            if(coIterator.hasNext()){
+                return true;
+            }else {
+                index++;
+            }
+            //more bucket left?
+            if (index<size){
+                coIterator =buckets[index].iterator();
+                return coIterator.hasNext();
+            }
             return false;
         }
 
@@ -149,7 +168,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
          */
         @Override
         public K next() {
-            return null;
+            return (K) coIterator.next().key;
         }
     }
 
