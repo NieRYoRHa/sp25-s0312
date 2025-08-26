@@ -2,10 +2,7 @@ package hashmap;
 
 import org.checkerframework.common.returnsreceiver.qual.This;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 /**
  *  A hash table-backed Map implementation.
@@ -15,6 +12,10 @@ import java.util.Set;
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
+    private int size;
+    private int Capacity;
+    private final double Factor;
+
     /**
      * Associates the specified value with the specified key in this map.
      * If the map already contains the specified key, replaces the key's mapping
@@ -23,10 +24,6 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * @param key
      * @param value
      */
-    private int size;
-    private int Capacity;
-    private double Factor;
-
     @Override
     public void put(K key, V value) {
 
@@ -136,8 +133,13 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public Set<K> keySet() {
-        return Set.of();
+        Set<K> kSet=new HashSet<>();
+        for(K k:this){;
+            kSet.add(k);
+        }
+        return kSet;
     }
+
 
     /**
      * Removes the mapping for the specified key from this map if present,
@@ -149,6 +151,14 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
+        if(containsKey(key)){
+            for(Node n:buckets[Math.floorMod(key.hashCode(), buckets.length)]){
+                if(n.key.equals(key)){
+                    buckets[Math.floorMod(key.hashCode(), buckets.length)].remove(n);
+                    return n.value;
+                }
+            }
+        }
         return null;
     }
 
@@ -270,7 +280,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      *  1. Insert items (`add` method)
      *  2. Remove items (`remove` method)
      *  3. Iterate through items (`iterator` method)
-     *  Note that that this is referring to the hash table bucket itself,
+     *  Note that this is referring to the hash table bucket itself,
      *  not the hash map itself.
      *
      * Each of these methods is supported by java.util.Collection,
