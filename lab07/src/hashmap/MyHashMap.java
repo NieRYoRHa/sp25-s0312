@@ -24,26 +24,40 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * @param value
      */
     private int size;
+    private int Capacity;
+    private double Factor;
 
     @Override
     public void put(K key, V value) {
+
+        if((double) size/Capacity>=Factor){
+            reSize();
+        }
+
+        Node insertNode = new Node(key,value);
+
         if(containsKey(key)){
-            update(key,value);
+            update(insertNode);
         }
         else {
-            map(key, value);
+            map(insertNode);
+            size++;
         }
     }
 
     /**
      * Update the value of key
      */
-    public void update(K key,V value){
-
+    public void update(Node node){
+        for(Node n:buckets[Math.floorMod(node.hashCode(),buckets.length)]){
+            if(n.equals(node)){
+                n.value=node.value;
+            }
+        }
     }
 
-    public void map(K key,V value){
-
+    public void map(Node node){
+        buckets[Math.floorMod(node.hashCode(),buckets.length)].add(node);
     }
 
     /**
@@ -54,6 +68,13 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
+        if(containsKey(key)){
+            for(Node n:buckets[Math.floorMod(key.hashCode(), buckets.length)]){
+                if(n.key.equals(key)){
+                    return n.value;
+                }
+            }
+        }
         return null;
     }
 
@@ -64,8 +85,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public boolean containsKey(K key) {
-        for(K k:this){
-            if(k==key){
+        for(Node n:buckets[Math.floorMod(key.hashCode(), buckets.length)]){
+            if(n.key.equals(key)){
                 return true;
             }
         }
@@ -77,7 +98,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     /**
@@ -86,7 +107,16 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * double the initialCapacity
      */
     public void reSize(){
-
+        int newCapacity=Capacity*2;
+        Collection<Node>[] newBuckets = new Collection[newCapacity];
+        for(int i=0;i<newCapacity;i++){
+            newBuckets[i]=this.createBucket();
+        }
+        for(K k:this){
+            newBuckets[Math.floorMod(k.hashCode(),newCapacity)].add(new Node(k,this.get(k)));
+        }
+        Capacity=newCapacity;
+        buckets=newBuckets;
     }
 
     /**
@@ -94,7 +124,10 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public void clear() {
-
+        for(Collection<Node> n:buckets){
+            n.clear();
+        }
+        size=0;
     }
 
     /**
@@ -134,7 +167,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         private int index;
         private Iterator<Node> coIterator;
         MyHashMapIterator(){
-            coIterator =buckets[index].iterator();
+            coIterator = buckets[index].iterator();
         }
 
         /**
@@ -153,9 +186,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
                 index++;
             }
             //more bucket left?
-            if (index<size){
-                coIterator =buckets[index].iterator();
-                return coIterator.hasNext();
+            if (index<Capacity){
+                coIterator = buckets[index].iterator();
+                return this.hasNext();
             }
             return false;
         }
@@ -189,7 +222,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         public boolean equals(Object obj){
             if(obj instanceof MyHashMap<?,?>.Node){
                 Node other = (Node) obj;
-                return other.key==this.key&&other.value==this.value;
+                return other.key.equals(this.key);
             }
             return false;
         }
@@ -221,10 +254,13 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * @param loadFactor maximum load factor
      */
     public MyHashMap(int initialCapacity, double loadFactor) {
-        buckets = new Collection[initialCapacity];
-        for(int i=0;i<initialCapacity;i++){
+        Capacity=initialCapacity;
+        Factor=loadFactor;
+        buckets = new Collection[Capacity];
+        for(int i=0;i<Capacity;i++){
             buckets[i]=this.createBucket();
         }
+        size=0;
     }
 
     /**
