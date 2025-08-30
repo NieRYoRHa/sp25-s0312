@@ -1,5 +1,8 @@
 package ngrams;
 
+import org.checkerframework.checker.units.qual.K;
+import org.objectweb.asm.tree.analysis.Value;
+
 import java.util.List;
 import java.util.TreeMap;
 
@@ -29,8 +32,8 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * inclusive of both end points.
      */
     public TimeSeries(TimeSeries ts, int startYear, int endYear) {
-        super();
         // TODO: Fill in this constructor.
+        super(ts.subMap(startYear,true,endYear,true));
     }
 
     /**
@@ -38,7 +41,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public List<Integer> years() {
         // TODO: Fill in this method.
-        return null;
+        return this.keySet().stream().toList();
     }
 
     /**
@@ -47,7 +50,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public List<Double> data() {
         // TODO: Fill in this method.
-        return null;
+        return this.values().stream().toList();
     }
 
     /**
@@ -61,9 +64,25 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries plus(TimeSeries ts) {
         // TODO: Fill in this method.
-        return null;
+        TimeSeries timeSeries=new TimeSeries();
+        timeSeries.putAll(this);
+        timeSeries.putAll(ts);
+        for(int k:timeSeries.years()){
+            timeSeries.put(k,timeSeries.plus(k,this,ts));
+        }
+        return timeSeries;
     }
 
+    public Double plus(int key,TimeSeries timeSeries1,TimeSeries timeSeries2)
+    {
+        if(timeSeries1.get(key)==null){
+            return timeSeries2.get(key);
+        }
+        if(timeSeries2.get(key)==null){
+            return timeSeries1.get(key);
+        }
+        return timeSeries1.get(key)+timeSeries2.get(key);
+    }
     /**
      * Returns the quotient of the value for each year this TimeSeries divided by the
      * value for the same year in TS. Should return a new TimeSeries (does not modify this

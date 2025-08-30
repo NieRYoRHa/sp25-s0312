@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TreeMap;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -61,4 +62,24 @@ public class TimeSeriesTest {
         assertThat(totalPopulation.years()).isEmpty();
         assertThat(totalPopulation.data()).isEmpty();
     }
+
+    @Test
+    public void testConstructor(){
+        TimeSeries t1 =new TimeSeries();
+        t1.put(1990,5.0);
+        t1.put(1993,6.3);
+        t1.put(1994,7.3);
+        t1.put(1995,6.3);
+        t1.put(1996,8.3);
+        TimeSeries t2 = new TimeSeries(t1,1993,1995);
+        List l2 = t2.years();
+        List l3 = t1.data();
+        TreeMap t3 =new TreeMap();
+        t3.put(1990,5);
+        t3.put(1991,5);
+
+
+
+    }
+
 } 
