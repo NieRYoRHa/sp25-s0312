@@ -94,8 +94,34 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries dividedBy(TimeSeries ts) {
         // TODO: Fill in this method.
+        TimeSeries timeSeries = new TimeSeries();
+        timeSeries.putAll(this);
+        for(int k:timeSeries.years()){
+            if(!(timeSeries.dividedBy(k,this,ts)==null)){
+            timeSeries.put(k,timeSeries.dividedBy(k,this,ts));
+            }
+        }
+        return timeSeries;
+    }
+    public Double dividedBy(int key,TimeSeries timeSeries1,TimeSeries timeSeries2)
+    {
+        if(timeSeries1.get(key)==null){
+            return null;
+        }
+        if(timeSeries2.get(key)==null){
+            return null;
+        }
+        return timeSeries1.get(key)/timeSeries2.get(key);
+    }
+
+    @Override
+    public Double put (Integer key, Double value) {
+        if (MIN_YEAR<=key && key<=MAX_YEAR){
+        return super.put(key, value);
+        }
         return null;
     }
+
 
     // TODO: Add any private helper methods.
     // TODO: Remove all TODO comments before submitting.

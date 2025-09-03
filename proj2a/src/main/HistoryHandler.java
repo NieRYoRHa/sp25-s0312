@@ -8,18 +8,12 @@ import org.knowm.xchart.XYChart;
 
 import java.util.ArrayList;
 
-
-public class DummyHistoryHandler extends NgordnetQueryHandler {
-    @Override
+public class HistoryHandler {
     public String handle(NgordnetQuery q){
         System.out.println("Got query that looks like:");
         System.out.println("Words: " + q.words());
         System.out.println("Start Year: " + q.startYear());
         System.out.println("End Year: " + q.endYear());
-
-        System.out.println("But I'm totally ignoring that and just plotting a parabola\n" +
-                "and a sine wave, because your job will be to figure out how to\n" +
-                "actually use the query data.");
 
         TimeSeries parabola = new TimeSeries();
         for (int i = 1400; i < 1500; i += 1) {
