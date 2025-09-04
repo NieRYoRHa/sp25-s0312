@@ -39,8 +39,12 @@ public class NGramMap {
      */
     public TimeSeries countHistory(String word, int startYear, int endYear) {
         // TODO: Fill in this method.
-        TimeSeries ts =new TimeSeries(countHistory(word),startYear,endYear);
-        return ts;
+
+        TimeSeries ts =countHistory(word);
+        if(ts!=null){
+        return new TimeSeries(countHistory(word),startYear,endYear);
+        }
+        return new TimeSeries();
     }
 
     /**
@@ -52,20 +56,16 @@ public class NGramMap {
     public TimeSeries countHistory(String word) {
         // TODO: Fill in this method.
         TimeSeries ts =new TimeSeries();
-        int count = 0;
         In in =  new In(wordsFile);
         while (in.hasNextLine()) {
             String nextLine = in.readLine();
             String[] splitLine = nextLine.split("\t");
             if(word.equals(splitLine[0])){
                 ts.put(Integer.parseInt(splitLine[1]),Double.parseDouble(splitLine[2]));
-                count+=1;
+
             }
         }
-        if(count>0){
-            return ts;
-        }
-        return null;
+        return ts;
     }
 
     /**
