@@ -33,7 +33,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries(TimeSeries ts, int startYear, int endYear) {
         // TODO: Fill in this constructor.
-        super(ts.subMap(startYear,true,endYear,true));
+        super(ts.subMap(startYear, true, endYear, true));
     }
 
     /**
@@ -95,23 +95,15 @@ public class TimeSeries extends TreeMap<Integer, Double> {
     public TimeSeries dividedBy(TimeSeries ts) {
         // TODO: Fill in this method.
         TimeSeries timeSeries = new TimeSeries();
-        timeSeries.putAll(this);
-        for(int k:timeSeries.years()){
-            if(!(timeSeries.dividedBy(k,this,ts)==null)){
-            timeSeries.put(k,timeSeries.dividedBy(k,this,ts));
+        for(int k:this.years()){
+            if(ts.get(k)==null) {
+                throw new IllegalArgumentException("TS is missing a year that exists in this TimeSeries");
+            }
+            else{
+            timeSeries.put(k,this.get(k)/ts.get(k));
             }
         }
         return timeSeries;
-    }
-    public Double dividedBy(int key,TimeSeries timeSeries1,TimeSeries timeSeries2)
-    {
-        if(timeSeries1.get(key)==null){
-            return null;
-        }
-        if(timeSeries2.get(key)==null){
-            return null;
-        }
-        return timeSeries1.get(key)/timeSeries2.get(key);
     }
 
     @Override

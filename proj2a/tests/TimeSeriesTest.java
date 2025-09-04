@@ -77,9 +77,6 @@ public class TimeSeriesTest {
         TreeMap t3 =new TreeMap();
         t3.put(1990,5);
         t3.put(1991,5);
-
-
-
     }
 
 } 
